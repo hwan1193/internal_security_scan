@@ -14,7 +14,8 @@ C:\sec_reports\2025-10-15\
 ├─ osquery_2025-10-15\
 └─ critical_summary_2025-10-15.txt
 
-<img width="471" height="135" alt="image" src="https://github.com/user-attachments/assets/098a2397-c31b-470a-9ea6-ff1d0dab806e" />
+<img width="1686" height="663" alt="깃허브에 정리03" src="https://github.com/user-attachments/assets/16736074-2bcf-46c8-aa66-0abb3013af5c" />
+
 
 🧩 활용 예시
 
