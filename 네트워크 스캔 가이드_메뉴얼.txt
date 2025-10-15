@@ -336,23 +336,23 @@ Nmap scan report for 127.0.0.1
 Host is up (0.000049s latency).
 Not shown: 65518 closed tcp ports (reset)
 PORT      STATE    SERVICE
-80/tcp    open     http
-135/tcp   open     msrpc
-137/tcp   filtered netbios-ns
-445/tcp   open     microsoft-ds
-5040/tcp  open     unknown
-7680/tcp  open     pando-pub
-42235/tcp open     unknown
-47317/tcp open     unknown
-47337/tcp open     unknown
-49664/tcp open     unknown
-49665/tcp open     unknown
-49666/tcp open     unknown
-49667/tcp open     unknown
-49668/tcp open     unknown
-49672/tcp open     unknown
-63210/tcp open     unknown
-63212/tcp open     unknown
+8*/tcp    open     http
+1**/tcp   open     msrpc
+1**/tcp   filtered netbios-ns
+4**/tcp   open     microsoft-ds
+50**/tcp  open     unknown
+76**/tcp  open     pando-pub
+422**/tcp open     unknown
+473**/tcp open     unknown
+473**/tcp open     unknown
+496**/tcp open     unknown
+49**5/tcp open     unknown
+496**/tcp open     unknown
+4**67/tcp open     unknown
+4**68/tcp open     unknown
+4**72/tcp open     unknown
+6**10/tcp open     unknown
+6**12/tcp open     unknown
 
 Nmap done: 1 IP address (1 host up) scanned in 2.41 seconds
    Open ports on 127.0.0.1: 135,42235,445,47317,47337,49664,49665,49666,49667,49668,49672,5040,63210,63212,7680,80
@@ -362,22 +362,22 @@ Nmap scan report for 127.0.0.1
 Host is up (0.0038s latency).
 
 PORT      STATE SERVICE       VERSION
-80/tcp    open  http          Microsoft IIS httpd 10.0
-135/tcp   open  msrpc         Microsoft Windows RPC
-445/tcp   open  microsoft-ds?
-5040/tcp  open  unknown
-7680/tcp  open  pando-pub?
-42235/tcp open  ssl/unknown
-47317/tcp open  unknown
-47337/tcp open  ssl/unknown
-49664/tcp open  unknown
-49665/tcp open  unknown
-49666/tcp open  unknown
-49667/tcp open  unknown
-49668/tcp open  unknown
-49672/tcp open  unknown
-63210/tcp open  ssl/unknown
-63212/tcp open  ssl/unknown
+8*/tcp    open  http          Microsoft IIS httpd 10.0
+1*5/tcp   open  msrpc         Microsoft Windows RPC
+**5/tcp   open  microsoft-ds?
+5**0/tcp  open  unknown
+76**/tcp  open  pando-pub?
+42**5/tcp open  ssl/unknown
+47**7/tcp open  unknown
+4**37/tcp open  ssl/unknown
+4**64/tcp open  unknown
+4**65/tcp open  unknown
+49**6/tcp open  unknown
+49**7/tcp open  unknown
+49**8/tcp open  unknown
+4**72/tcp open  unknown
+6**10/tcp open  ssl/unknown
+6**12/tcp open  ssl/unknown
 1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
 SF-Port42235-TCP:V=7.98%T=SSL%I=2%D=9/26%Time=68D6527F%P=i686-pc-windows-w
 SF:indows%r(NULL,9E,"HTTP/1\.1\x20500\x20getreq\x20error\r\nContent-Length
@@ -422,13 +422,13 @@ PS C:\> Get-NetTCPConnection -LocalPort 5040,7680,42235,47317,47337,63210,63212 
 
 LocalPort  State OwningProcess
 ---------  ----- -------------
-     5040 Listen          7640
-     7680 Listen         17980
-    42235 Listen          8900
-    47317 Listen         24708
-    47337 Listen         24708
-    63210 Listen          4380
-    63212 Listen          4380
+     50** Listen          7640
+     76** Listen         17980
+    422** Listen          8900
+    473** Listen         24708
+    473** Listen         24708
+    632** Listen          4380
+    632** Listen          4380
 
 
 PS C:\>
@@ -621,5 +621,6 @@ osq_processes.json → 실행 중 프로세스 상위 50개
 osq_startup.json → 자동 시작 프로그램
 
 osq_drivers.json → 드라이버 정보
+
 
 이렇게 하나씩 열어보면 테이블로 바로 정리돼서 확인
