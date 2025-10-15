@@ -4,8 +4,6 @@
 ### ⚙️ 실행 명령
 PS C:\sec> .\internal_security_scan.ps1 -RunYara
 
-<img width="1696" height="667" alt="깃허브에 정리01" src="https://github.com/user-attachments/assets/a347f5b2-147c-40e3-ab71-45d15d795989" />
-
 실행 시 C:\sec_reports\<날짜> 폴더에 자동 리포트가 생성됩니다.
 C:\sec_reports\2025-10-15\
 ├─ nmap_2025-10-15\
