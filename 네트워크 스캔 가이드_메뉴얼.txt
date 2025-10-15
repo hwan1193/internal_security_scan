@@ -1,0 +1,625 @@
+기밀성: 데이터의 개인 정보나 민감한 정보가 허가되지 않은 사람에게 노출되지 않도록 보호하는 것을 의미합니다. 이를 통해 민감한 데이터를 안전하게 유지하고, 필요한 사람만 접근할 수 있도록 합니다.
+무결성: 데이터가 정확하고 신뢰할 수 있도록, 불필요한 변경이나 변조를 방지하는 것이 핵심입니다. 이를 위해 파일 권한 관리, 사용자 인증, 감사 추적 등의 도구가 활용됩니다.
+가용성: 필요한 정보를 언제든지 이용할 수 있도록 보장하는 것을 의미합니다. 시스템이 안정적으로 운영되어야 정보 접근성이 유지됩니다.
+
+PS C:\sec> dir
+
+
+    디렉터리: C:\sec
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        2025-09-12   오전 8:28                out                                                                 
+d-----        2025-09-24   오전 9:19                reports                                                             
+-a----        2025-09-08  오전 11:35            164 assets.csv                                                          
+-a----        2025-09-11   오후 3:35          17801 Get-DailySecReports.ps1                                             
+-a----        2025-09-11   오후 2:19           5155 Get-DailySecReports_back.ps1                                        
+-a----        2025-09-25  오후 12:15           6254 internal_security_scan.ps1                                          
+
+
+PS C:\sec>
+PS C:\sec>
+PS C:\sec> .internal_security_scan.ps1
+.internal_security_scan.ps1 : '.internal_security_scan.ps1' 용어가 cmdlet, 함수, 스크립트 파일 또는 실행할 수 있는 프로 그램 이름으로 인식되지 않습니다. 이름
+이 정확한지 확인하고 경로가 포함된 경우 경로가 올바른지 검증한 다음 다시 시도하십시오.
+위치 줄:1 문자:1
++ .internal_security_scan.ps1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.internal_security_scan.ps1:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\sec>
+PS C:\sec> Get-Command nmap,trivy -ErrorAction SilentlyContinue                                                                                                                                                                       
+
+PS C:\sec> Set-ExecutionPolicy Bypass -Scope Process -Force                                                                                                                                                                           
+
+PS C:\sec> C:\sec\internal_security_scan.ps1                                                                            경고: nmap not found in PATH. Skipping nmap.
+경고: trivy not found in PATH. Skipping trivy fs scan.
+ZAP baseline not available (zap-baseline.py). Skipping ZAP.
+'$trivyFsOut' 변수는 아직 설정되지 않았으므로 검색할 수 없습니다.
+위치 C:\sec\internal_security_scan.ps1:119 문자:15
++ if (Test-Path $trivyFsOut) {
++               ~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (trivyFsOut:String) [], ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : VariableIsUndefined
+
+PS C:\sec> Set-ExecutionPolicy Bypass -Scope Process -Force
+
+PS C:\sec> [System.Net.ServicePointManager]::SecurityProtocol=[System.Net.SecurityProtocolType]::Tls12
+
+PS C:\sec> iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+Forcing web requests to allow TLS v1.2 (Required for requests to Chocolatey.org)
+Getting latest version of the Chocolatey package for download.
+Not using proxy.
+Getting Chocolatey from https://community.chocolatey.org/api/v2/package/chocolatey/2.5.1.
+Downloading https://community.chocolatey.org/api/v2/package/chocolatey/2.5.1 to C:\Users\TRACXL~1\AppData\Local\Temp\chocolatey\chocoInstall\chocolatey.zip
+Not using proxy.
+Extracting C:\Users\TRACXL~1\AppData\Local\Temp\chocolatey\chocoInstall\chocolatey.zip to C:\Users\TRACXL~1\AppData\Local\Temp\chocolatey\chocoInstall
+Installing Chocolatey on the local machine
+Creating ChocolateyInstall as an environment variable (targeting 'Machine')
+  Setting ChocolateyInstall to 'C:\ProgramData\chocolatey'
+WARNING: It's very likely you will need to close and reopen your shell
+  before you can use choco.
+Restricting write permissions to Administrators
+We are setting up the Chocolatey package repository.
+The packages themselves go to 'C:\ProgramData\chocolatey\lib'
+  (i.e. C:\ProgramData\chocolatey\lib\yourPackageName).
+A shim file for the command line goes to 'C:\ProgramData\chocolatey\bin'
+  and points to an executable in 'C:\ProgramData\chocolatey\lib\yourPackageName'.
+
+Creating Chocolatey CLI folders if they do not already exist.
+
+chocolatey.nupkg file not installed in lib.
+ Attempting to locate it from bootstrapper.
+PATH environment variable does not have C:\ProgramData\chocolatey\bin in it. Adding...
+경고: Not setting tab completion: Profile file does not exist at 'C:\Users\Tracxlogis\OneDrive -
+Tracxlogis\문서\WindowsPowerShell\Microsoft.PowerShell_profile.ps1'.
+Chocolatey CLI (choco.exe) is now ready.
+You can call choco from anywhere, command line or PowerShell by typing choco.
+Run choco /? for a list of functions.
+You may need to shut down and restart PowerShell and/or consoles
+ first prior to using choco.
+Ensuring Chocolatey commands are on the path
+Ensuring chocolatey.nupkg is in the lib folder
+
+-- nmap 설치 진행 --
+
+PS C:\sec> choco install -y nmap
+Chocolatey v2.5.1
+Installing the following packages:
+nmap
+By installing, you accept licenses for the packages.
+Downloading package from source 'https://community.chocolatey.org/api/v2/'
+Progress: Downloading chocolatey-compatibility.extension 1.0.0... 100%
+
+chocolatey-compatibility.extension v1.0.0 [Approved]
+chocolatey-compatibility.extension package files install completed. Performing other installation steps.
+ Installed/updated chocolatey-compatibility extensions.
+ The install of chocolatey-compatibility.extension was successful.
+  Deployed to 'C:\ProgramData\chocolatey\extensions\chocolatey-compatibility'
+Downloading package from source 'https://community.chocolatey.org/api/v2/'
+Progress: Downloading chocolatey-core.extension 1.4.0... 100%
+
+chocolatey-core.extension v1.4.0 [Approved]
+chocolatey-core.extension package files install completed. Performing other installation steps.
+ Installed/updated chocolatey-core extensions.
+ The install of chocolatey-core.extension was successful.
+  Deployed to 'C:\ProgramData\chocolatey\extensions\chocolatey-core'
+Downloading package from source 'https://community.chocolatey.org/api/v2/'
+Progress: Downloading autohotkey.install 2.0.19... 100%
+
+autohotkey.install v2.0.19 [Approved]
+autohotkey.install package files install completed. Performing other installation steps.
+Installing autohotkey.install...
+autohotkey.install has been installed.
+AutoHotkey* installed to 'C:\Program Files\AutoHotkey'
+AutoHotkey* registered as AutoHotkey
+Installing autohotkey.install...
+autohotkey.install has been installed.
+0
+  autohotkey.install can be automatically uninstalled.
+ The install of autohotkey.install was successful.
+  Deployed to 'C:\Program Files\AutoHotkey'
+Downloading package from source 'https://community.chocolatey.org/api/v2/'
+Progress: Downloading autohotkey 2.0.19... 100%
+
+autohotkey v2.0.19 [Approved]
+autohotkey package files install completed. Performing other installation steps.
+ The install of autohotkey was successful.
+  Software install location not explicitly set, it could be in package or
+  default install location of installer.
+Downloading package from source 'https://community.chocolatey.org/api/v2/'
+Progress: Downloading chocolatey-windowsupdate.extension 1.0.5... 100%
+
+chocolatey-windowsupdate.extension v1.0.5 [Approved]
+chocolatey-windowsupdate.extension package files install completed. Performing other installation steps.
+ Installed/updated chocolatey-windowsupdate extensions.
+ The install of chocolatey-windowsupdate.extension was successful.
+  Deployed to 'C:\ProgramData\chocolatey\extensions\chocolatey-windowsupdate'
+Downloading package from source 'https://community.chocolatey.org/api/v2/'
+Progress: Downloading KB2919442 1.0.20160915... 100%
+
+KB2919442 v1.0.20160915 [Approved]
+KB2919442 package files install completed. Performing other installation steps.
+Skipping installation because this hotfix only applies to Windows 8.1 and Windows Server 2012 R2.
+ The install of KB2919442 was successful.
+  Software install location not explicitly set, it could be in package or
+  default install location of installer.
+Downloading package from source 'https://community.chocolatey.org/api/v2/'
+Progress: Downloading KB2919355 1.0.20160915... 100%
+
+KB2919355 v1.0.20160915 [Approved]
+KB2919355 package files install completed. Performing other installation steps.
+Skipping installation because this hotfix only applies to Windows 8.1 and Windows Server 2012 R2.
+ The install of KB2919355 was successful.
+  Software install location not explicitly set, it could be in package or
+  default install location of installer.
+Downloading package from source 'https://community.chocolatey.org/api/v2/'
+Progress: Downloading KB2999226 1.0.20181019... 100%
+
+KB2999226 v1.0.20181019 [Approved]
+KB2999226 package files install completed. Performing other installation steps.
+Skipping installation because update KB2999226 does not apply to this operating system (Microsoft Windows 11 Pro).
+ The install of KB2999226 was successful.
+  Software install location not explicitly set, it could be in package or
+  default install location of installer.
+Downloading package from source 'https://community.chocolatey.org/api/v2/'
+Progress: Downloading KB3035131 1.0.3... 100%
+
+KB3035131 v1.0.3 [Approved]
+KB3035131 package files install completed. Performing other installation steps.
+Skipping installation because update KB3035131 does not apply to this operating system (Microsoft Windows 11 Pro).
+ The install of KB3035131 was successful.
+  Software install location not explicitly set, it could be in package or
+  default install location of installer.
+Downloading package from source 'https://community.chocolatey.org/api/v2/'
+Progress: Downloading KB3033929 1.0.5... 100%
+
+KB3033929 v1.0.5 [Approved]
+KB3033929 package files install completed. Performing other installation steps.
+Skipping installation because update KB3033929 does not apply to this operating system (Microsoft Windows 11 Pro).
+ The install of KB3033929 was successful.
+  Software install location not explicitly set, it could be in package or
+  default install location of installer.
+Downloading package from source 'https://community.chocolatey.org/api/v2/'
+Progress: Downloading vcredist140 14.44.35211... 100%
+
+vcredist140 v14.44.35211 [Approved]
+vcredist140 package files install completed. Performing other installation steps.
+Downloading vcredist140-x86
+  from 'https://download.visualstudio.microsoft.com/download/pr/7ebf5fdb-36dc-4145-b0a0-90d3d5990a61/0C09F2611660441084CE0DF425C51C11E147E6447963C3690F97E0B25C55ED64/VC_redist.x86.exe'
+Progress: 100% - Completed download of C:\Users\Tracxlogis\AppData\Local\Temp\chocolatey\vcredist140\14.44.35211\VC_redist.x86.exe (13.31 MB).
+Download of VC_redist.x86.exe (13.31 MB) completed.
+Hashes match.
+Installing vcredist140-x86...
+vcredist140-x86 has been installed.
+Downloading vcredist140-x64 64 bit
+  from 'https://download.visualstudio.microsoft.com/download/pr/7ebf5fdb-36dc-4145-b0a0-90d3d5990a61/CC0FF0EB1DC3F5188AE6300FAEF32BF5BEEBA4BDD6E8E445A9184072096B713B/VC_redist.x64.exe'
+Progress: 100% - Completed download of C:\Users\Tracxlogis\AppData\Local\Temp\chocolatey\vcredist140\14.44.35211\VC_redist.x64.exe (24.45 MB).
+Download of VC_redist.x64.exe (24.45 MB) completed.
+Hashes match.
+Installing vcredist140-x64...
+vcredist140-x64 has been installed.
+  vcredist140 may be able to be automatically uninstalled.
+ The install of vcredist140 was successful.
+  Software installed as 'exe', install location is likely default.
+Downloading package from source 'https://community.chocolatey.org/api/v2/'
+Progress: Downloading nmap 7.98.0... 100%
+
+nmap v7.98.0 [Approved]
+nmap package files install completed. Performing other installation steps.
+Installing nmap...
+nmap has been installed.
+  nmap may be able to be automatically uninstalled.
+Environment Vars (like PATH) have changed. Close/reopen your shell to
+ see the changes (or in powershell/cmd.exe just type `refreshenv`).
+ The install of nmap was successful.
+  Deployed to 'C:\Program Files (x86)\Nmap'
+
+Chocolatey installed 12/12 packages.
+ See the log for details (C:\ProgramData\chocolatey\logs\chocolatey.log).
+
+Installed:
+ - autohotkey v2.0.19
+ - autohotkey.install v2.0.19
+ - chocolatey-compatibility.extension v1.0.0
+ - chocolatey-core.extension v1.4.0
+ - chocolatey-windowsupdate.extension v1.0.5
+ - KB2919355 v1.0.20160915
+ - KB2919442 v1.0.20160915
+ - KB2999226 v1.0.20181019
+ - KB3033929 v1.0.5
+ - KB3035131 v1.0.3
+ - nmap v7.98.0
+ - vcredist140 v14.44.35211
+
+Packages requiring reboot:
+ - vcredist140 (exit code 3010)
+
+The recent package changes indicate a reboot is necessary.
+ Please reboot at your earliest convenience.
+
+-- Trivy 설치 진행 --
+
+PS C:\sec> choco install -y trivy
+Chocolatey v2.5.1
+Installing the following packages:
+trivy
+By installing, you accept licenses for the packages.
+Downloading package from source 'https://community.chocolatey.org/api/v2/'
+Progress: Downloading trivy 0.66.0... 100%
+
+trivy v0.66.0 [Approved]
+trivy package files install completed. Performing other installation steps.
+Downloading trivy 64 bit
+  from 'https://github.com/aquasecurity/trivy/releases/download/v0.66.0/trivy_0.66.0_Windows-64bit.zip'
+Progress: 100% - Completed download of C:\Users\Tracxlogis\AppData\Local\Temp\chocolatey\trivy\0.66.0\trivy_0.66.0_windows-64bit.zip (44.95 MB).
+Download of trivy_0.66.0_windows-64bit.zip (44.95 MB) completed.
+Hashes match.
+Extracting C:\Users\Tracxlogis\AppData\Local\Temp\chocolatey\trivy\0.66.0\trivy_0.66.0_windows-64bit.zip to C:\ProgramData\chocolatey\lib\trivy\tools...
+C:\ProgramData\chocolatey\lib\trivy\tools
+No db update selected
+ ShimGen has successfully created a shim for trivy.exe
+ The install of trivy was successful.
+  Deployed to 'C:\ProgramData\chocolatey\lib\trivy\tools'
+
+Chocolatey installed 1/1 packages.
+ See the log for details (C:\ProgramData\chocolatey\logs\chocolatey.log).
+
+-- zaproxy 설치 진행 --
+
+PS C:\sec> choco install -y zaproxy
+Chocolatey v2.5.1
+Installing the following packages:
+zaproxy
+By installing, you accept licenses for the packages.
+zaproxy not installed. The package was not found with the source(s) listed.
+ Source(s): 'https://community.chocolatey.org/api/v2/'
+ NOTE: When you specify explicit sources, it overrides default sources.
+If the package version is a prerelease and you didn't specify `--pre`,
+ the package may not be found.
+Please see https://docs.chocolatey.org/en-us/troubleshooting for more
+ assistance.
+
+Chocolatey installed 0/1 packages. 1 packages failed.
+ See the log for details (C:\ProgramData\chocolatey\logs\chocolatey.log).
+
+Failures
+ - zaproxy - zaproxy not installed. The package was not found with the source(s) listed.
+ Source(s): 'https://community.chocolatey.org/api/v2/'
+ NOTE: When you specify explicit sources, it overrides default sources.
+If the package version is a prerelease and you didn't specify `--pre`,
+ the package may not be found.
+Please see https://docs.chocolatey.org/en-us/troubleshooting for more
+ assistance.
+
+PS C:\sec> choco install osquery -y
+Chocolatey v2.5.1
+Installing the following packages:
+osquery
+By installing, you accept licenses for the packages.
+Downloading package from source 'https://community.chocolatey.org/api/v2/'
+Progress: Downloading osquery 5.11.0... 100%
+
+osquery v5.11.0 [Approved]
+osquery package files install completed. Performing other installation steps.
+C:\Program Files\osquery\log
+True
+PATH environment variable does not have C:\Program Files\osquery in it. Adding...
+SecurityProtocol was set to Tls12, resetting to SystemDefault.
+Environment Vars (like PATH) have changed. Close/reopen your shell to
+ see the changes (or in powershell/cmd.exe just type `refreshenv`).
+ ShimGen has successfully created a shim for osqueryi.exe
+ ShimGen has successfully created a shim for osqueryd.exe
+ The install of osquery was successful.
+  Software install location not explicitly set, it could be in package or
+  default install location of installer.
+
+Chocolatey installed 1/1 packages.
+ See the log for details (C:\ProgramData\chocolatey\logs\chocolatey.log).
+PS C:\sec>
+PS C:\sec> Get-Command osqueryi.exe
+
+CommandType     Name                                               Version    Source
+-----------     ----                                               -------    ------
+Application     osqueryi.exe                                       5.11.0.0   C:\ProgramData\chocolatey\bin\osqueryi...
+
+=======================================================================
+== 정상 결과 ==
+
+PS C:\> C:\sec\internal_security_scan.ps1
+[*] Running nmap with smart profile (LAN=full, WAN=top-ports)...
+-> Discovery scan for 127.0.0.1 (full-ports)...
+Starting Nmap 7.98 ( https://nmap.org ) at 2025-09-26 17:44 +0900
+Nmap scan report for 127.0.0.1
+Host is up (0.000049s latency).
+Not shown: 65518 closed tcp ports (reset)
+PORT      STATE    SERVICE
+80/tcp    open     http
+135/tcp   open     msrpc
+137/tcp   filtered netbios-ns
+445/tcp   open     microsoft-ds
+5040/tcp  open     unknown
+7680/tcp  open     pando-pub
+42235/tcp open     unknown
+47317/tcp open     unknown
+47337/tcp open     unknown
+49664/tcp open     unknown
+49665/tcp open     unknown
+49666/tcp open     unknown
+49667/tcp open     unknown
+49668/tcp open     unknown
+49672/tcp open     unknown
+63210/tcp open     unknown
+63212/tcp open     unknown
+
+Nmap done: 1 IP address (1 host up) scanned in 2.41 seconds
+   Open ports on 127.0.0.1: 135,42235,445,47317,47337,49664,49665,49666,49667,49668,49672,5040,63210,63212,7680,80
+   Running service/version scan on those ports...
+Starting Nmap 7.98 ( https://nmap.org ) at 2025-09-26 17:44 +0900
+Nmap scan report for 127.0.0.1
+Host is up (0.0038s latency).
+
+PORT      STATE SERVICE       VERSION
+80/tcp    open  http          Microsoft IIS httpd 10.0
+135/tcp   open  msrpc         Microsoft Windows RPC
+445/tcp   open  microsoft-ds?
+5040/tcp  open  unknown
+7680/tcp  open  pando-pub?
+42235/tcp open  ssl/unknown
+47317/tcp open  unknown
+47337/tcp open  ssl/unknown
+49664/tcp open  unknown
+49665/tcp open  unknown
+49666/tcp open  unknown
+49667/tcp open  unknown
+49668/tcp open  unknown
+49672/tcp open  unknown
+63210/tcp open  ssl/unknown
+63212/tcp open  ssl/unknown
+1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+SF-Port42235-TCP:V=7.98%T=SSL%I=2%D=9/26%Time=68D6527F%P=i686-pc-windows-w
+SF:indows%r(NULL,9E,"HTTP/1\.1\x20500\x20getreq\x20error\r\nContent-Length
+SF::\x2046\r\nAccess-Control-Allow-Private-Network:\x20true\r\nConnection:
+SF:\x20close\r\n\r\nError\x20500:\x20getreq\x20error\nconn->request_len\x2
+SF:0<=\x200")%r(GenericLines,9A,"HTTP/1\.1\x20500\x20getreq\x20error\r\nCo
+SF:ntent-Length:\x2042\r\nAccess-Control-Allow-Private-Network:\x20true\r\
+SF:nConnection:\x20close\r\n\r\nError\x20500:\x20getreq\x20error\nBad\x20r
+SF:equest:\x20\[\r\n\r\]")%r(GetRequest,12E,"HTTP/1\.1\x20200\x20OK\r\nCon
+SF:tent-Length:\x20127\r\nConnection:\x20close\r\nAccess-Control-Allow-Ori
+SF:gin:\x20\*\r\nAccess-Control-Allow-Private-Network:\x20true\r\nContent-
+SF:Type:\x20text/html;\x20charset=utf-8\r\n\r\n{\n\x20\x20\x20\"MessageID\
+SF:"\x20:\x20\"\",\n\x20\x20\x20\"ResultCode\"\x20:\x201004,\n\x20\x20\x20
+SF:\"ResultMessage\"\x20:\x20\"invalid\x20origin\",\n\x20\x20\x20\"Service
+SF:ID\"\x20:\x20\"\",\n\x20\x20\x20\"Version\"\x20:\x20\"\"\n}\n")%r(SSLSe
+SF:ssionReq,9E,"HTTP/1\.1\x20500\x20getreq\x20error\r\nContent-Length:\x20
+SF:46\r\nAccess-Control-Allow-Private-Network:\x20true\r\nConnection:\x20c
+SF:lose\r\n\r\nError\x20500:\x20getreq\x20error\nconn->request_len\x20<=\x
+SF:200")%r(TLSSessionReq,9E,"HTTP/1\.1\x20500\x20getreq\x20error\r\nConten
+SF:t-Length:\x2046\r\nAccess-Control-Allow-Private-Network:\x20true\r\nCon
+SF:nection:\x20close\r\n\r\nError\x20500:\x20getreq\x20error\nconn->reques
+SF:t_len\x20<=\x200");
+Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 71.66 seconds
+   Service scan saved: C:\sec_reports\2025-09-26\nmap_2025-09-26\services_127.0.0.1_2025-09-26.xml
+-> Skip sample domain: example.com
+[*] Running trivy filesystem scan (vuln only, faster)...
+2025-09-26T17:45:22+09:00       INFO    [vuln] Vulnerability scanning is enabled
+2025-09-26T17:45:22+09:00       INFO    Number of language-specific files       num=0
+Trivy FS report: C:\sec_reports\2025-09-26\trivy_fs_2025-09-26.json
+No images listed in C:\sec\scan_images.txt. Skipping image scans.
+ZAP baseline not available (zap-baseline.py). Skipping ZAP.
+No CRITICAL/HIGH findings in trivy fs.
+Reports archived: C:\sec_reports\sec_reports_2025-09-26.zip
+[+] Scan run complete. Check C:\sec_reports\2025-09-26 for raw reports and C:\sec_reports\2025-09-26\critical_summary_2025-09-26.txt for critical summary.
+PS C:\>
+
+PS C:\> Get-NetTCPConnection -LocalPort 5040,7680,42235,47317,47337,63210,63212 |
+>>   Select-Object LocalPort,State,OwningProcess | Sort-Object LocalPort
+
+LocalPort  State OwningProcess
+---------  ----- -------------
+     5040 Listen          7640
+     7680 Listen         17980
+    42235 Listen          8900
+    47317 Listen         24708
+    47337 Listen         24708
+    63210 Listen          4380
+    63212 Listen          4380
+
+
+PS C:\>
+PS C:\> Get-Process -Id 4380
+
+Handles  NPM(K)    PM(K)      WS(K)     CPU(s)     Id  SI ProcessName
+-------  ------    -----      -----     ------     --  -- -----------
+    844     127   596072     582876   9,511.58   4380   0 SGASPKILS
+
+
+PS C:\>
+PS C:\> Get-Process -Id 7640
+
+Handles  NPM(K)    PM(K)      WS(K)     CPU(s)     Id  SI ProcessName
+-------  ------    -----      -----     ------     --  -- -----------
+    510      51     6772      15744      71.72   7640   0 svchost
+
+
+PS C:\>
+
+====================================================================
+
+VDI 에서 진행 시 확장자 txt를 ps1로 변경 하는 방법!!!
+
+PS C:\sec> dir
+
+
+    Directory: C:\sec
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----         9/29/2025  11:59 AM          12722 internal_security_scan.txt
+
+
+PS C:\sec> Get-childItem C:\sec\ | Select-Object Name,Extension,Length,LastWriteTime
+
+Name                       Extension Length LastWriteTime
+----                       --------- ------ -------------
+internal_security_scan.txt .txt       12722 9/29/2025 11:59:04 AM
+
+
+PS C:\sec> Rename-Item "C:\sec\internal_security_scan.txt" -NewName ".\internal_security_scan.ps1"
+PS C:\sec>
+
+=======================================================================
+
+실행 예시
+
+기본 실행:
+
+C:\sec\internal_security_scan.ps1
+
+
+증거 수집 포함:
+
+C:\sec\internal_security_scan.ps1 -Investigate
+
+
+YARA 스캔 포함:
+
+C:\sec\internal_security_scan.ps1 -RunYara
+
+
+둘 다 실행:
+
+C:\sec\internal_security_scan.ps1 -Investigate -RunYara
+
+
+※ 이 버전이면 기존 기능 + 랜섬웨어/악성코드 의심 탐지(YARA) + 수동 증거 수집까지 모두 커버됩니다.
+
+-- yara 설치 진행 --
+
+PS C:\WINDOWS\system32> choco install yara -y
+Chocolatey v2.5.1
+Installing the following packages:
+yara
+By installing, you accept licenses for the packages.
+Downloading package from source 'https://community.chocolatey.org/api/v2/'
+Progress: Downloading yara 4.5.3... 100%
+
+yara v4.5.3 [Approved]
+yara package files install completed. Performing other installation steps.
+Extracting 64-bit C:\ProgramData\chocolatey\lib\yara\tools\yara-v4.5.3-2352-win64.zip to C:\ProgramData\chocolatey\lib\yara\tools...
+C:\ProgramData\chocolatey\lib\yara\tools
+ ShimGen has successfully created a shim for yara64.exe
+ ShimGen has successfully created a shim for yarac64.exe
+ The install of yara was successful.
+  Deployed to 'C:\ProgramData\chocolatey\lib\yara\tools'
+
+Chocolatey installed 1/1 packages.
+ See the log for details (C:\ProgramData\chocolatey\logs\chocolatey.log).
+
+-- yara64 설치 파일 확인 --
+
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> Get-Command yara64.exe
+
+CommandType     Name                                               Version    Source
+-----------     ----                                               -------    ------
+Application     yara64.exe                                         1.0.0.0    C:\ProgramData\chocolatey\bin\yara64.exe
+
+
+PS C:\WINDOWS\system32> yara64.exe --version
+4.5.2
+PS C:\WINDOWS\system32>
+
+--- 실행 전 YARA 빠른 버전으로 확인!! ---
+
+PS C:\WINDOWS\system32> & "C:\ProgramData\chocolatey\lib\yara\tools\yara64.exe" --version
+4.5.2
+PS C:\WINDOWS\system32> where.exe yara64.exe
+C:\ProgramData\chocolatey\bin\yara64.exe
+PS C:\WINDOWS\system32>
+
+-- 파워쉘에서 파일 자동 생성 해야 함... 내가 메모장에 만드는게 아님.. --
+
+PS C:\WINDOWS\system32> Remove-Item -Force C:\sec\yara_rules.yarc -ErrorAction SilentlyContinue
+PS C:\WINDOWS\system32> Remove-Item -Force C:\sec\yara_rules.yar -ErrorAction SilentlyContinue
+PS C:\WINDOWS\system32> Set-Content -Path "C:\sec\yara_rules.yar" -Value $rules -Encoding Ascii
+PS C:\WINDOWS\system32> & "C:\ProgramData\chocolatey\lib\yara\tools\yarac64.exe" C:\sec\yara_rules.yar C:\sec\yara_rules.yarc
+PS C:\WINDOWS\system32>
+===============================================
+
+YARA 룰 실행 하기 전에 해당 파일이 필요함 !!!
+
+# 임시 최소 룰 생성 / yara_rules.yar
+@'
+rule test_hello {
+  strings: $s = "hello"
+  condition: $s
+}
+'@ | Set-Content -Path C:\sec\yara_rules.yar -Encoding UTF8
+
+======================================================================
+
+-- Nmap 설치 파일 경로 다를 경우 --
+
+PS C:\Windows\system32> Get-ChildItem -Path C:\ -Recurse -Filter nmap.exe -ErrorAction SilentlyContinue | Select-Object FullName
+
+FullName
+--------
+C:\Program Files (x86)\Nmap\nmap.exe
+
+
+PS C:\Windows\system32> & 'C:\ProgramData\chocolatey\lib\nmap\tools\nmap.exe' --version
+& : The term 'C:\ProgramData\chocolatey\lib\nmap\tools\nmap.exe' is not recognized as the name of a cmdlet, function, s
+cript file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is cor
+rect and try again.
+At line:1 char:3
++ & 'C:\ProgramData\chocolatey\lib\nmap\tools\nmap.exe' --version
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\ProgramData\...\tools\nmap.exe:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Windows\system32> & 'C:\Program Files (x86)\Nmap\nmap.exe' --version
+Nmap version 7.98 ( https://nmap.org )
+Platform: i686-pc-windows-windows
+Compiled with: nmap-liblua-5.4.8 openssl-3.0.17 nmap-libssh2-1.11.1 nmap-libz-1.3.1 nmap-libpcre2-10.45 Npcap-1.83 nmap-libdnet-1.18.0 ipv6
+Compiled without:
+Available nsock engines: iocp poll select
+PS C:\Windows\system32> $env:PATH = $env:PATH + ';C:\Program Files (x86)\Nmap'
+PS C:\Windows\system32> nmap --version
+Nmap version 7.98 ( https://nmap.org )
+Platform: i686-pc-windows-windows
+Compiled with: nmap-liblua-5.4.8 openssl-3.0.17 nmap-libssh2-1.11.1 nmap-libz-1.3.1 nmap-libpcre2-10.45 Npcap-1.83 nmap-libdnet-1.18.0 ipv6
+Compiled without:
+Available nsock engines: iocp poll select
+
+------------------------------------------------------------------------------------------
+
+깔끔하게 돌리고 싶으면(선택)
+
+오류/경고 숨기고 매치만 보고 싶을 때:
+
+& "C:\ProgramData\chocolatey\lib\yara\tools\yara64.exe" -r C:\sec\yara_rules.yar C:\Windows\System32 2>$null 
+
+=========================================================================
+-- Osquery 정상 결과 값 (수동으로 확인 시) --
+
+Get-Content "C:\sec_reports\2025-10-14\osquery_2025-10-14\osq_listening.json" | ConvertFrom-Json | Format-Table
+osq_listening.json → 현재 열려 있는 포트/프로세스 목록
+
+osq_users.json → 계정 정보
+
+osq_patches.json → 설치된 패치 목록
+
+osq_processes.json → 실행 중 프로세스 상위 50개
+
+osq_startup.json → 자동 시작 프로그램
+
+osq_drivers.json → 드라이버 정보
+
+이렇게 하나씩 열어보면 테이블로 바로 정리돼서 확인
