@@ -419,6 +419,11 @@ try {
 if (Test-Path $compiled) { $rules = $compiled }
 
 if ($RunYara) {
+    #$rules = "C:\sec\yara_rules.yar"
+    #$localTargets = @("C:\Windows\System32")
+    #$yaraOut = Join-Path $outDir "yara"
+    #Run-YARAScan -RulesFile $rules -Targets $localTargets -OutDir $yaraOut
+    # 무조건 소스 룰(yar)만 사용
     $rules = "C:\sec\yara_rules.yar"
     $localTargets = @("C:\Windows\System32")
     $yaraOut = Join-Path $outDir "yara"
@@ -470,5 +475,6 @@ try {
 } catch {
     Write-Warning "Failed to archive results: $_"
 }
+
 
 Write-Host "[+] Scan run complete. Check $outDir for raw reports and $summaryFile for critical summary."
