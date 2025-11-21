@@ -18,6 +18,125 @@ d-----        2025-09-24   오전 9:19                reports
 -a----        2025-09-25  오후 12:15           6254 internal_security_scan.ps1                                          
 
 
+Chocolatey 설치 (가장 먼저 해야 함)
+
+관리자 권한 PowerShell에서 그대로 실행
+
+Set-ExecutionPolicy Bypass -Scope Process -Force; `
+[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; `
+iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+설치 후 PowerShell 재시작 필수.
+
+버전 확인!!
+
+choco --version
+
+필요한 도구 한 번에 설치
+전체 설치 (추천)
+
+choco install -y nmap trivy yara osquery python
+
+nmap --version
+trivy --version
+yara64.exe --version
+osqueryi.exe --version
+
+=======================================================
+nmap은 설치 안 될 시 이런식으로 진행 할 것!
+=======================================================
+
+PS C:\Windows\system32> Get-ChildItem "C:\ProgramData\chocolatey\lib\nmap\tools"
+
+
+    Directory: C:\ProgramData\chocolatey\lib\nmap\tools
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----     2025-08-22   오전 9:14            534 chocolateyInstall.ps1
+-a----     2025-08-22   오전 9:08           1103 chocolateyUninstall.ps1
+-a----     2025-08-22   오전 9:08           1800 install.ahk
+-a----     2025-11-20  오전 10:05              6 nmap-7.98-setup.exe.ignore
+
+
+PS C:\Windows\system32> $env:Path += ";C:\ProgramData\chocolatey\lib\nmap\tools"
+PS C:\Windows\system32> nmap --version
+nmap : The term 'nmap' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the
+ spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ nmap --version
++ ~~~~
+    + CategoryInfo          : ObjectNotFound: (nmap:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Windows\system32> Get-ChildItem -Path "C:\Program Files","C:\Program Files (x86)" -Recurse `
+>>   -Filter nmap.exe -ErrorAction SilentlyContinue | Select-Object FullName
+
+FullName
+--------
+C:\Program Files (x86)\Nmap\nmap.exe
+
+
+PS C:\Windows\system32> Remove-Item "C:\ProgramData\chocolatey\lib\nmap\tools\nmap-7.98-setup.exe.ignore" -Force
+PS C:\Windows\system32> choco upgrade nmap --force -y
+Chocolatey v2.5.1
+Upgrading the following packages:
+nmap
+By upgrading, you accept licenses for the packages.
+nmap v7.98.0 is the latest version available based on your source(s).
+Downloading package from source 'https://community.chocolatey.org/api/v2/'
+Progress: Downloading nmap 7.98.0... 100%
+
+nmap v7.98.0 (forced) [Approved]
+nmap package files upgrade completed. Performing other installation steps.
+Installing nmap...
+nmap has been installed.
+Environment Vars (like PATH) have changed. Close/reopen your shell to
+ see the changes (or in powershell/cmd.exe just type `refreshenv`).
+ The upgrade of nmap was successful.
+  Deployed to 'C:\Program Files (x86)\Nmap'
+
+Chocolatey upgraded 1/1 packages.
+ See the log for details (C:\ProgramData\chocolatey\logs\chocolatey.log).
+PS C:\Windows\system32>
+PS C:\Windows\system32> nmap --version
+nmap : The term 'nmap' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the
+ spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ nmap --version
++ ~~~~
+    + CategoryInfo          : ObjectNotFound: (nmap:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Windows\system32> $env:Path += ";C:\Program Files (x86)\Nmap"
+PS C:\Windows\system32> nmap --version
+Nmap version 7.98 ( https://nmap.org )
+Platform: i686-pc-windows-windows
+Compiled with: nmap-liblua-5.4.8 openssl-3.0.17 nmap-libssh2-1.11.1 nmap-libz-1.3.1 nmap-libpcre2-10.45 Npcap-1.83 nmap-libdnet-1.18.0 ipv6
+Compiled without:
+Available nsock engines: iocp poll select
+PS C:\Windows\system32>
+
+================================================================================================================================================
+지금은 $env:Path += ... 를 현재 PowerShell 세션에만 추가한 거라,
+창 닫고 다시 열면 nmap 또 못 찾을 수도 있습니다.
+
+PowerShell에서 바로 영구 PATH 추가
+
+[System.Environment]::SetEnvironmentVariable(
+  "Path",
+  $env:Path + ";C:\Program Files (x86)\Nmap",
+  [System.EnvironmentVariableTarget]::Machine
+)
+
+=================================================================================================================================================
+그 다음 새 PowerShell 열고:
+
+nmap --version
+
+C:\sec\internal_security_scan.ps1 -Mode Safe -RunYara -Investigate << -- 실행 하면 끝
+=================================================================================================================================================
 PS C:\sec>
 PS C:\sec>
 PS C:\sec> .internal_security_scan.ps1
@@ -336,23 +455,23 @@ Nmap scan report for 127.0.0.1
 Host is up (0.000049s latency).
 Not shown: 65518 closed tcp ports (reset)
 PORT      STATE    SERVICE
-8*/tcp    open     http
-1**/tcp   open     msrpc
-1**/tcp   filtered netbios-ns
-4**/tcp   open     microsoft-ds
-50**/tcp  open     unknown
-76**/tcp  open     pando-pub
-422**/tcp open     unknown
-473**/tcp open     unknown
-473**/tcp open     unknown
-496**/tcp open     unknown
-49**5/tcp open     unknown
-496**/tcp open     unknown
-4**67/tcp open     unknown
-4**68/tcp open     unknown
-4**72/tcp open     unknown
-6**10/tcp open     unknown
-6**12/tcp open     unknown
+80/tcp    open     http
+135/tcp   open     msrpc
+137/tcp   filtered netbios-ns
+445/tcp   open     microsoft-ds
+5040/tcp  open     unknown
+7680/tcp  open     pando-pub
+42235/tcp open     unknown
+47317/tcp open     unknown
+47337/tcp open     unknown
+49664/tcp open     unknown
+49665/tcp open     unknown
+49666/tcp open     unknown
+49667/tcp open     unknown
+49668/tcp open     unknown
+49672/tcp open     unknown
+63210/tcp open     unknown
+63212/tcp open     unknown
 
 Nmap done: 1 IP address (1 host up) scanned in 2.41 seconds
    Open ports on 127.0.0.1: 135,42235,445,47317,47337,49664,49665,49666,49667,49668,49672,5040,63210,63212,7680,80
@@ -362,22 +481,22 @@ Nmap scan report for 127.0.0.1
 Host is up (0.0038s latency).
 
 PORT      STATE SERVICE       VERSION
-8*/tcp    open  http          Microsoft IIS httpd 10.0
-1*5/tcp   open  msrpc         Microsoft Windows RPC
-**5/tcp   open  microsoft-ds?
-5**0/tcp  open  unknown
-76**/tcp  open  pando-pub?
-42**5/tcp open  ssl/unknown
-47**7/tcp open  unknown
-4**37/tcp open  ssl/unknown
-4**64/tcp open  unknown
-4**65/tcp open  unknown
-49**6/tcp open  unknown
-49**7/tcp open  unknown
-49**8/tcp open  unknown
-4**72/tcp open  unknown
-6**10/tcp open  ssl/unknown
-6**12/tcp open  ssl/unknown
+80/tcp    open  http          Microsoft IIS httpd 10.0
+135/tcp   open  msrpc         Microsoft Windows RPC
+445/tcp   open  microsoft-ds?
+5040/tcp  open  unknown
+7680/tcp  open  pando-pub?
+42235/tcp open  ssl/unknown
+47317/tcp open  unknown
+47337/tcp open  ssl/unknown
+49664/tcp open  unknown
+49665/tcp open  unknown
+49666/tcp open  unknown
+49667/tcp open  unknown
+49668/tcp open  unknown
+49672/tcp open  unknown
+63210/tcp open  ssl/unknown
+63212/tcp open  ssl/unknown
 1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
 SF-Port42235-TCP:V=7.98%T=SSL%I=2%D=9/26%Time=68D6527F%P=i686-pc-windows-w
 SF:indows%r(NULL,9E,"HTTP/1\.1\x20500\x20getreq\x20error\r\nContent-Length
@@ -422,13 +541,13 @@ PS C:\> Get-NetTCPConnection -LocalPort 5040,7680,42235,47317,47337,63210,63212 
 
 LocalPort  State OwningProcess
 ---------  ----- -------------
-     50** Listen          7640
-     76** Listen         17980
-    422** Listen          8900
-    473** Listen         24708
-    473** Listen         24708
-    632** Listen          4380
-    632** Listen          4380
+     5040 Listen          7640
+     7680 Listen         17980
+    42235 Listen          8900
+    47317 Listen         24708
+    47337 Listen         24708
+    63210 Listen          4380
+    63212 Listen          4380
 
 
 PS C:\>
@@ -621,6 +740,5 @@ osq_processes.json → 실행 중 프로세스 상위 50개
 osq_startup.json → 자동 시작 프로그램
 
 osq_drivers.json → 드라이버 정보
-
 
 이렇게 하나씩 열어보면 테이블로 바로 정리돼서 확인
